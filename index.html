@@ -485,7 +485,7 @@ background-color: #008000;
     <section>
         <h2>CSS Boxes</h2>
         <div id="left">
-            <small>
+
                 <ul>
                     <li><b>Content: </b>the content of the box, where text and images appear</li>
                     <li><b>Padding: </b>clears an area around the content. The padding is transparent</li>
@@ -935,7 +935,7 @@ if __name__=='__main__':
     <!-- Slide 20 -->
     <section>
         <h2>Reactive Text Input</h2>
-        <small>
+
             <p>We will try to create a dynamic input, where typing something inside of the input form will provide output to other place </p>
         <pre class="python">
             <code>
@@ -1056,7 +1056,7 @@ if __name__=='__main__':
     <!-- Slide 24 -->
     <section>
         <h2>Dynamic Graph</h2>
-        <small>
+
             <p>Steps:</p>
             <ol>
                 <li>Read the data</li>
@@ -1309,26 +1309,20 @@ if __name__ == "__main__":
        <pre class="python">
             <code>
 import dash
-from dash import html, dcc
+from dash import dcc, html
+import plotly.express as px
 
-app = dash.Dash(__name__, use_pages=True)
-server=app.server
-app.layout = html.Div(
+dash.register_page(__name__, path='/')
+
+df = px.data.gapminder()
+
+layout = html.Div(
     [
-        html.Div([
-            dcc.Link(html.Button(page['name'], id="navigation"), href=page['path'])
-            for page in dash.page_registry.values()
-        ], className="twelve columns"),
-        html.Hr(),
-
-        # content of each page
-        dash.page_container
+        dcc.Dropdown([x for x in df.continent.unique()], id='cont-choice', style={'width':'50%'}),
+        dcc.Graph(id='line-fig',
+                    figure=px.histogram(df, x='continent', y='lifeExp', histfunc='avg'))
     ]
 )
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
             </code>
         </pre>         
@@ -1379,6 +1373,92 @@ layout = html.Div(
     
 </section>
 
+
+ <!-- Slide  -->
+<section>
+    <section>
+        <h2>Deployment</h2>
+    </section>
+     <!-- Slide  -->
+    <section>
+        <h2>Free hosting sources</h2>
+        <ul>
+            <li>Pythonanywhere: only Python</li>
+            <li>Shinyapps: only R</li>
+            <li class="fragment highlight-red"><s>Heroku</s> </li>
+            <li class="fragment highlight-green">Railway app</li>
+        </ul>
+    </section>
+
+     <!-- Slide  -->
+    <section>
+        <h2>Pre Deployment Steps I</h2>
+        <small>
+            <ul>
+                <li>download the folder from <a href="https://drive.google.com/drive/folders/10h7spLsfR4ACMjYrCAueS3LOcGO2N0i6">here</a></li>
+                <li>handling the dependencies:
+                    <ol>
+                        <li>create a directory: <i>folder name</i> and put above mentioned files there</li>
+                        <li>navigate to the above directory by opening it either with <i>pycharm</i> or <i>vscode</i> and in the terminal type <i style="color: red;">git init</i></li>
+                        <li>Create a Virtual Environment:</li>
+                            <ol>
+                                <li>installing virtualenv package: <i style="color: red;">pip install virtualenv</i></li>
+                                <li>create a Virtual Environment:  <i style="color: red;">python -m virtualenv venv</i> </li>
+                                <li>activate Virtual Environment:
+                                    <ul>
+                                       <li> Windows:  <i style="color: red;">.\venv\Scripts\activate</i> </li>
+                                    <li>Mac:  <i style="color: red;">. venv/bin/activate</i> </li>
+                                    <li>Linux:  <i style="color: red;">. venv/bin/activate</i> </li>
+                                    </ul>
+                                </li>
+
+        
+                            </ol>
+                            
+                        <li>install there all the dependencies:</li>
+                            <ul>
+                                <li>our dashboard needs: <i style="color: red;"> pip install pandas dash datetime</i> </li>
+                                <li>for the deployment: <i style="color: red;"> pip install gunicorn </i> </li>
+                                <li>create the requirements.txt  file: <i style="color: red;"> pip freeze > requirements.txt</i> </li>
+                            </ul>
+                    </ol>
+                </li>
+            </ul>
+        </small>
+    </section> 
+
+     <!-- Slide  -->
+    <section>
+        <h2>Deployment Steps II</h2>
+        
+        <small>
+            <ol>
+                <li>In <i style="color: red;">app.py</i> file right below  <i style="color: red;">app=Dash(__name__)</i> add: <i style="color: red;">server=app.server</i></li>
+                <li>Sign in to heroku and create an app</li>
+                <li>create <i style="color: red;">.gitignore</i> file and put: </li>
+                <pre><code> 
+                    ve
+                    *.py
+                    .env
+                    .DS_Store
+                 </code></pre>
+                <li>create <i style="color: red;"> Procfile</i> web: gunicorn app:server</li>
+                <li>You need to publish your app to github: check-out  <a href="https://docs.github.com/en/get-started/importing-your-projects-to-github/importing-source-code-to-github/adding-locally-hosted-code-to-github">here</a></li>
+                <li>Open <a href="https://railway.app/">Railway app</a> and sign up with your github account  </li>
+                <li>Start a New Project</li>
+                <li>Select deploy from Github Repo; Chose a repo and Deploy Now</li>
+                <li>Wait until it builds</li>
+                <li>Open the project and go the settings and add the domain</li>
+                
+            </ol>
+        </small>
+    </section>
+
+    <!-- Slide 11 -->
+<section>
+    <h2><a href="https://dss-223-demo.up.railway.app/">Check out my app</a></h2>
+</section>
+</section>
 
 <!-- Final Slide -->
 <section>
